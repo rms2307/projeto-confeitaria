@@ -4,16 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Confeitaria.Api.Repositories.Base
 {
-    public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class
+    public class RepositoryBase<TEntity>(ConfeitariaContext context) : IRepositoryBase<TEntity> where TEntity : class
     {
-        private readonly ConfeitariaContext _context;
-        private readonly DbSet<TEntity> _entities;
-
-        public RepositoryBase(ConfeitariaContext context, DbSet<TEntity> entities)
-        {
-            _context = context;
-            _entities = entities;
-        }
+        private readonly ConfeitariaContext _context = context;
+        private readonly DbSet<TEntity> _entities = context.Set<TEntity>();
 
         public async Task<IEnumerable<TEntity>> ObterTodosAsync()
         {

@@ -3,12 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Confeitaria.Api.Infra.ContextDb
 {
-    public class ConfeitariaContext : DbContext
+    public class ConfeitariaContext(DbContextOptions<ConfeitariaContext> options) : DbContext(options)
     {
-        public ConfeitariaContext(DbContextOptions<ConfeitariaContext> options) : base(options)
-        {
-        }
-
         public DbSet<Ingrediente> Ingredientes { get; set; }
     }
 }

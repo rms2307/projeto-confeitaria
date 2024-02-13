@@ -4,6 +4,6 @@ namespace Confeitaria.Api.Interfaces.UseCases.Ingredientes
 {
     public interface ICriarIngredienteUseCase
     {
-        Task<int> Criar(CriarIngredienteInput input);
+        Task CriarAsync(CriarIngredienteInput input);
     }
 }
