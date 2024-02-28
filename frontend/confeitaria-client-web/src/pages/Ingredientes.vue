@@ -2,6 +2,7 @@
 import { onMounted, ref } from "vue"
 import { type IngredienteType } from "@/types/IngredienteType"
 import { obterIngredientes } from "@/services/IngredienteService"
+import Carregando from "./Carregando.vue"
 
 let ingredientes = ref<IngredienteType[] | void>([])
 let carregando = ref<boolean>(false)
@@ -10,7 +11,10 @@ const obterListaIngredientes = async () => {
   carregando.value = true
   ingredientes.value = await obterIngredientes()
     .then((data) => data)
-    .catch((erro) => console.log(erro))
+    .catch((erro) => {
+      carregando.value = false
+      console.log(erro)
+    })
     .finally(() => (carregando.value = false))
 }
 
@@ -20,7 +24,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <v-list>
+  <Carregando v-if="carregando" texto="Carregando ingredientes..." />
+
+  <v-list v-if="!carregando">
     <v-list-item
       v-for="ingrediente in ingredientes"
       :title="ingrediente.nome"
