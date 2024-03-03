@@ -1,5 +1,5 @@
-import Ingredientes from "@/pages/Ingredientes.vue"
-import Home from "@/pages/Home.vue"
+import Ingrediente from "@/pages/IngredientePage.vue"
+import Home from "@/pages/HomePage.vue"
 import { createRouter, createWebHistory } from "vue-router"
 
 const router = createRouter({
@@ -13,7 +13,7 @@ const router = createRouter({
     {
       path: "/ingredientes",
       name: "ingredientes",
-      component: Ingredientes,
+      component: Ingrediente,
     },
   ],
 })

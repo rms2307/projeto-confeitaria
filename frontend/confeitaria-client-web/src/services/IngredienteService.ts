@@ -1,9 +1,9 @@
-import type { IIngredienteType } from "@/types/IngredienteType"
+import type { IngredienteType } from "@/types/IngredienteType"
 import { UnidadeMedidaEnum } from "@/types/UnidadeMedidaEnum"
 
-export async function obterIngredientes(): Promise<IIngredienteType[]> {
+export async function obterIngredientes(): Promise<IngredienteType[]> {
   // TODO: Implementar chamada para a API
-  const ingredientes: IIngredienteType[] = [
+  const ingredientesMock: IngredienteType[] = [
     { id: 1, nome: "Farinha de Trigo", unidadeMedida: UnidadeMedidaEnum.Grama },
     { id: 2, nome: "Ovo", unidadeMedida: UnidadeMedidaEnum.Unidade },
     { id: 3, nome: "Leite", unidadeMedida: UnidadeMedidaEnum.Litro },
@@ -14,6 +14,17 @@ export async function obterIngredientes(): Promise<IIngredienteType[]> {
     { id: 8, nome: "Alho", unidadeMedida: UnidadeMedidaEnum.Unidade },
     { id: 9, nome: "Tomate", unidadeMedida: UnidadeMedidaEnum.Unidade },
     { id: 10, nome: "Pimentão", unidadeMedida: UnidadeMedidaEnum.Unidade },
+    { id: 11, nome: "Farinha de Trigo", unidadeMedida: UnidadeMedidaEnum.Grama },
+    { id: 12, nome: "Ovo", unidadeMedida: UnidadeMedidaEnum.Unidade },
+    { id: 13, nome: "Leite", unidadeMedida: UnidadeMedidaEnum.Litro },
+    { id: 14, nome: "Açúcar", unidadeMedida: UnidadeMedidaEnum.Grama },
+    { id: 15, nome: "Sal", unidadeMedida: UnidadeMedidaEnum.Grama },
+    { id: 16, nome: "Óleo", unidadeMedida: UnidadeMedidaEnum.Litro },
+    { id: 17, nome: "Cebola", unidadeMedida: UnidadeMedidaEnum.Unidade },
+    { id: 18, nome: "Alho", unidadeMedida: UnidadeMedidaEnum.Unidade },
+    { id: 19, nome: "Tomate", unidadeMedida: UnidadeMedidaEnum.Unidade },
+    { id: 20, nome: "Pimentão", unidadeMedida: UnidadeMedidaEnum.Unidade },
   ]
-  return ingredientes
+
+  return ingredientesMock
 }
