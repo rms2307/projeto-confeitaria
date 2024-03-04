@@ -73,22 +73,34 @@ const obterDetalhesIngrediente = () => {
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn
-          text="Editar"
-          variant="plain"
-          @click="habilitarEdicao = !habilitarEdicao"
-        ></v-btn>
-        <v-btn
-          text="Fechar"
-          variant="plain"
-          @click="$emit('fecharDetalhes')"
-        ></v-btn>
-        <!-- <v-btn
-          color="primary"
-          text="Save"
-          variant="tonal"
-          @click="console.log('SALVAR')"
-        ></v-btn> -->
+        <div v-if="!habilitarEdicao">
+          <v-btn
+            text="Fechar"
+            variant="plain"
+            @click="$emit('fecharDetalhes')"
+          ></v-btn>
+
+          <v-btn
+            color="primary"
+            text="Editar"
+            variant="tonal"
+            @click="habilitarEdicao = !habilitarEdicao"
+          ></v-btn>
+        </div>
+        <div v-else>
+          <v-btn
+            text="Cancelar"
+            variant="plain"
+            @click="habilitarEdicao = !habilitarEdicao"
+          ></v-btn>
+
+          <v-btn
+            text="Salvar"
+            color="primary"
+            variant="tonal"
+            @click="console.log('SALVAR')"
+          ></v-btn>
+        </div>
       </v-card-actions>
     </v-card>
   </v-dialog>
