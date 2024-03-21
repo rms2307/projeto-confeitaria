@@ -3,6 +3,7 @@ using Confeitaria.Api.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.RegistraDependencias(builder.Configuration);
+builder.Services.AddCors();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -23,5 +24,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors(x => x.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader());
 
 app.Run();
