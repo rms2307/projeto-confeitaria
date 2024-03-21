@@ -7,22 +7,24 @@ import DetalhesIngrediente from "@/components/DetalhesIngrediente.vue"
 import ListaIngredientes from "../components/ListaIngredientes.vue"
 import type { DetalhesOptions } from "@/types/Options/DetalhesOptions"
 
-let detalhesOptions = ref<DetalhesOptions>({
+const detalhesOptions = ref<DetalhesOptions>({
   abrirModal: false,
   ingredienteId: 0,
 })
-let ingredientes = ref<IngredienteType[] | void>([])
-let carregando = ref<boolean>(false)
+const ingredientes = ref<IngredienteType[] | void>([])
+const carregando = ref<boolean>(false)
 
 const obterListaIngredientes = async () => {
   carregando.value = true
+
   ingredientes.value = await obterIngredientes()
     .then((data) => data)
     .catch((erro) => {
       carregando.value = false
-      console.log(erro)
+      console.error(erro)
     })
-    .finally(() => (carregando.value = false))
+
+  carregando.value = false
 }
 
 const abrirModalDetalhes = (ingredienteId: number) => {
@@ -41,7 +43,7 @@ onMounted(async () => {
 
 <template>
   <Carregando v-if="carregando" texto="Carregando ingredientes..." />
-
+<span>Adicionar novo ingrediente</span>
   <ListaIngredientes
     @abrir-detalhes="abrirModalDetalhes"
     :carregando="carregando"

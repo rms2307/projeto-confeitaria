@@ -2,29 +2,23 @@
 import { computed, onMounted, ref } from "vue"
 import type { DetalhesOptions } from "@/types/Options/DetalhesOptions"
 import type { IngredienteType } from "@/types/IngredienteType"
-import {
-  UnidadeMedidaEnum,
-  obterTextoUnidadeMedida,
-} from "@/types/UnidadeMedidaEnum"
-
-const modalAberto = ref<boolean>(false)
-const habilitarEdicao = ref<boolean>(false)
-
-const idIngrediente = ref<number>()
-const nomeIngrediente = ref<string>()
-const unidadeMedidaIngrediente = ref<string>()
-
-const abrirModal = computed(() => modalAberto.value)
+import { obterIngrediente } from "@/services/IngredienteService"
+import { UnidadeMedidaEnum } from "@/types/UnidadeMedidaEnum"
 
 const props = defineProps<{
   detalhesOptions: DetalhesOptions
 }>()
 
-const ingredienteMock: IngredienteType = {
-  id: 1,
-  nome: "Farinha de Trigo",
-  unidadeMedida: UnidadeMedidaEnum.Grama,
-}
+const emit = defineEmits(["fecharDetalhes"])
+
+const modalAberto = ref<boolean>(false)
+const habilitarEdicao = ref<boolean>(false)
+const carregando = ref<boolean>(false)
+
+const nomeIngrediente = ref<string>()
+const unidadeMedidaIngrediente = ref<UnidadeMedidaEnum>()
+
+const abrirModal = computed(() => modalAberto.value)
 
 onMounted(() => {
   modalAberto.value = props.detalhesOptions.abrirModal
@@ -32,12 +26,42 @@ onMounted(() => {
   obterDetalhesIngrediente()
 })
 
-const obterDetalhesIngrediente = () => {
-  idIngrediente.value = ingredienteMock.id
-  nomeIngrediente.value = ingredienteMock.nome
-  unidadeMedidaIngrediente.value = obterTextoUnidadeMedida(
-    ingredienteMock.unidadeMedida
-  )
+const obterDetalhesIngrediente = async () => {
+  carregando.value = true
+
+  const ingrediente: IngredienteType | undefined | void =
+    await obterIngrediente(props.detalhesOptions.ingredienteId)
+      .then((data) => data)
+      .catch((erro) => {
+        carregando.value = false
+        console.error(erro)
+      })
+
+  nomeIngrediente.value = ingrediente?.nome
+  unidadeMedidaIngrediente.value = ingrediente?.unidadeMedida
+
+  carregando.value = false
+}
+
+const salvarIngrediente = async (
+  nome: string | undefined,
+  unidadeMedida: string | undefined
+) => {
+  carregando.value = true
+
+  console.log("Salvar", nome)
+  console.log("Salvar", unidadeMedida)
+  emit("fecharDetalhes")
+  carregando.value = false
+}
+
+const removerIngrediente = async () => {
+  carregando.value = true
+
+  console.log("Remover", props.detalhesOptions.ingredienteId)
+  
+  emit("fecharDetalhes")
+  carregando.value = false
 }
 </script>
 
@@ -46,7 +70,7 @@ const obterDetalhesIngrediente = () => {
     <v-card title="Detalhes do Ingrediente">
       <v-card-text>
         <v-row dense>
-          <v-col cols="12" md="4" sm="6">
+          <v-col cols="12" md="6" sm="6">
             <v-text-field
               center-affix
               :disabled="!habilitarEdicao"
@@ -55,12 +79,18 @@ const obterDetalhesIngrediente = () => {
             ></v-text-field>
           </v-col>
 
-          <v-col cols="12" md="4" sm="6">
-            <v-text-field
+          <v-col cols="12" md="6" sm="6">
+            <v-select
               :disabled="!habilitarEdicao"
-              label="Unidade de Medida"
               v-model="unidadeMedidaIngrediente"
-            ></v-text-field>
+              type="enum"
+              label="Unidade de Medida"
+              :items="[
+                UnidadeMedidaEnum.Grama,
+                UnidadeMedidaEnum.Litro,
+                UnidadeMedidaEnum.Unidade,
+              ]"
+            ></v-select>
           </v-col>
         </v-row>
 
@@ -95,10 +125,20 @@ const obterDetalhesIngrediente = () => {
           ></v-btn>
 
           <v-btn
+            color="#F44336"
+            text="Remover"
+            variant="tonal"
+            @click="removerIngrediente"
+          ></v-btn>
+
+          <v-btn
             text="Salvar"
             color="primary"
             variant="tonal"
-            @click="console.log('SALVAR')"
+            :loading="carregando"
+            @click="
+              salvarIngrediente(nomeIngrediente, unidadeMedidaIngrediente)
+            "
           ></v-btn>
         </div>
       </v-card-actions>
